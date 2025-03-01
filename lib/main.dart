@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Foungnigue Souleymane Hassan Coulibaly
 void main() {
   runApp(const MyApp());
 }
@@ -82,8 +83,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
         child: Column(
           children: <Widget>[
             Text(
-              "This is the Task Management Application",
-              style: TextStyle(color: Colors.cyan, fontSize: 35.0),
+              "Task Management Application designed by Hassan",
+              style: TextStyle(color: Colors.cyan, fontSize: 30.0),
             ),
             SizedBox(
               width: 20,
