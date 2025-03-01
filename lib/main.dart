@@ -58,9 +58,30 @@ class _TaskListScreenState extends State<TaskListScreen> {
             TextField(),
             DropdownButton(items: items, onChanged: onChanged),
             ElevatedButton(
-                onPressed: onPressed,
-                child: ElevatedButton.icon(onPressed: onPressed, label: label)),
-            ListView(),
+                onPressed: () {},
+                child: ElevatedButton.icon(onPressed: () {}, label: label)),
+
+            // ListView of the tasks
+            ListView(
+              padding: const EdgeInsets.all(8),
+              children: <Widget>[
+                Container(
+                  height: 50,
+                  color: Colors.amber[600],
+                  child: const Center(child: Text('Entry A')),
+                ),
+                Container(
+                  height: 50,
+                  color: Colors.amber[500],
+                  child: const Center(child: Text('Entry B')),
+                ),
+                Container(
+                  height: 50,
+                  color: Colors.amber[100],
+                  child: const Center(child: Text('Entry C')),
+                ),
+              ],
+            )
           ],
         ),
       ),
