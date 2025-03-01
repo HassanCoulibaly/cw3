@@ -7,18 +7,15 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Task Manager',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const TaskListScreen(
-        title: "Task Management App",
-      ),
+      home: const TaskListScreen(),
     );
   }
 }
@@ -32,60 +29,127 @@ class Task {
 }
 
 class TaskListScreen extends StatefulWidget {
-  const TaskListScreen({super.key, required this.title});
-
-  final String title;
+  const TaskListScreen({super.key});
 
   @override
   State<TaskListScreen> createState() => _TaskListScreenState();
 }
 
 class _TaskListScreenState extends State<TaskListScreen> {
+  final TextEditingController _taskController = TextEditingController();
+  final List<Task> _tasks = [];
+  String _selectedPriority = "Low";
+
+  final Map<String, int> _priorityOrder = {"High": 1, "Medium": 2, "Low": 3};
+
+  void _addTask() {
+    if (_taskController.text.isEmpty) return;
+
+    setState(() {
+      _tasks.add(Task(name: _taskController.text, priority: _selectedPriority));
+      _taskController.clear();
+      _sortTasks();
+    });
+  }
+
+  void _toggleTaskCompletion(int index) {
+    setState(() {
+      _tasks[index].isCompleted = !_tasks[index].isCompleted;
+    });
+  }
+
+  void _deleteTask(int index) {
+    setState(() {
+      _tasks.removeAt(index);
+    });
+  }
+
+  void _sortTasks() {
+    _tasks.sort((a, b) =>
+        _priorityOrder[a.priority]!.compareTo(_priorityOrder[b.priority]!));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(
-          widget.title,
-        ),
+        title: const Text("Task Management App"),
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField(),
-            DropdownButton(items: items, onChanged: onChanged),
-            ElevatedButton(
-                onPressed: () {},
-                child: ElevatedButton.icon(onPressed: () {}, label: label)),
-
-            // ListView of the tasks
-            ListView(
-              padding: const EdgeInsets.all(8),
-              children: <Widget>[
-                Container(
-                  height: 50,
-                  color: Colors.amber[600],
-                  child: const Center(child: Text('Entry A')),
+            Text(
+              "This is the Task Management Application",
+              style: TextStyle(color: Colors.cyan, fontSize: 35.0),
+            ),
+            SizedBox(
+              width: 20,
+              height: 20,
+            ),
+            TextField(
+              controller: _taskController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Enter Task',
+              ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                DropdownButton<String>(
+                  value: _selectedPriority,
+                  items: ["Low", "Medium", "High"]
+                      .map((priority) => DropdownMenuItem(
+                            value: priority,
+                            child: Text(priority),
+                          ))
+                      .toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedPriority = value!;
+                    });
+                  },
                 ),
-                Container(
-                  height: 50,
-                  color: Colors.amber[500],
-                  child: const Center(child: Text('Entry B')),
-                ),
-                Container(
-                  height: 50,
-                  color: Colors.amber[100],
-                  child: const Center(child: Text('Entry C')),
+                ElevatedButton.icon(
+                  style: const ButtonStyle(
+                    backgroundColor:
+                        WidgetStatePropertyAll<Color>(Colors.orange),
+                  ),
+                  onPressed: _addTask,
+                  icon: const Icon(Icons.add),
+                  label: const Text("Add Task"),
                 ),
               ],
-            )
+            ),
+            const SizedBox(height: 10),
+            Expanded(
+              child: ListView.builder(
+                itemCount: _tasks.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    child: ListTile(
+                      leading: Checkbox(
+                        value: _tasks[index].isCompleted,
+                        onChanged: (_) => _toggleTaskCompletion(index),
+                      ),
+                      title: Text(_tasks[index].name),
+                      subtitle: Text("Priority: ${_tasks[index].priority}"),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                        onPressed: () => _deleteTask(index),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
-      // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
