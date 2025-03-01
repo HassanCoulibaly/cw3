@@ -23,6 +23,14 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class Task {
+  String name;
+  bool isCompleted;
+  String priority;
+
+  Task({required this.name, this.isCompleted = false, required this.priority});
+}
+
 class TaskListScreen extends StatefulWidget {
   const TaskListScreen({super.key, required this.title});
 
@@ -46,7 +54,14 @@ class _TaskListScreenState extends State<TaskListScreen> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[],
+          children: <Widget>[
+            TextField(),
+            DropdownButton(items: items, onChanged: onChanged),
+            ElevatedButton(
+                onPressed: onPressed,
+                child: ElevatedButton.icon(onPressed: onPressed, label: label)),
+            ListView(),
+          ],
         ),
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
