@@ -23,16 +23,16 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+class TaskListScreen extends StatefulWidget {
+  const TaskListScreen({super.key, required this.title});
 
   final String title;
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<TaskListScreen> createState() => _TaskListScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _TaskListScreenState extends State<TaskListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
